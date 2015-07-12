@@ -3,7 +3,7 @@
 """
 Usage: make_playlist directory name
 Generates a .txt file playlist with whatever is in the directory with the given name
-
+the playlist is in the ~/playlist directory
 """
 
 from itertools import ifilter
