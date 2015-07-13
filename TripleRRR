@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mplayer -quiet -identify http://freezone.iinet.net.au/include/radio/playlists/triple-r-fm.m3u

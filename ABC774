@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mplayer -quiet  -identify http://www.abc.net.au/res/streaming/audio/aac/local_melbourne.pls
+
