@@ -137,7 +137,7 @@ class Adafruit_CharLCD(object):
         self.displaycontrol |= self.LCD_BLINKON
         self.write4bits(self.LCD_DISPLAYCONTROL | self.displaycontrol)
 
-    def DisplayLeft(self):
+    def scrollDisplayLeft(self):
         """ These commands scroll the display without changing the RAM """
         self.write4bits(self.LCD_CURSORSHIFT | self.LCD_DISPLAYMOVE | self.LCD_MOVELEFT)
 

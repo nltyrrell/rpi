@@ -19,7 +19,7 @@ lcd = Adafruit_CharLCD()
 
 in_plist = '/home/pi/playlists/%s.txt' %sys.argv[1]
 
-lcd.begin(16, 1)
+lcd.begin(16, 2)
 
 def readplaylist(filestr):
 	with open(filestr) as f:
@@ -40,39 +40,44 @@ artist='artist'
 track='track'
 
 while True:
-	out = p.stdout.readline() #(1)
-	if out == '' and p.poll() != None:
-		lcd.clear()
-		break
-	if out.startswith('Playing'):
-		song = out[8:-2]
-		print("Song info: %s"%song)
-		print "LAUNCH MEDIATHINGY"
-		info_cmd = ["mediainfo",song]
-		minfo = Popen(info_cmd, stderr=PIPE, stdout=PIPE)
-		for line in minfo.stdout.readlines():
-			if line.startswith('Performer'):
-				artist = line.split(':', 1)[1].strip()
-			if line.startswith('Track name '):
-				track = line.split(':', 1)[1].strip()
-		print("artist %s"%artist)
-		print("track %s"%track)
+    out = p.stdout.readline() #(1)
+    if out == '' and p.poll() != None:
+        lcd.clear()
+        break
+    if out.startswith('Playing'):
+        song = out[8:-2]
+        print("Song info: %s"%song)
+        print "LAUNCH MEDIATHINGY"
+        info_cmd = ["mediainfo",song]
+        minfo = Popen(info_cmd, stderr=PIPE, stdout=PIPE)
+        for line in minfo.stdout.readlines():
+            if line.startswith('Performer'):
+                artist = line.split(':', 1)[1].strip()
+            if line.startswith('Track name '):
+                track = line.split(':', 1)[1].strip()
+        print("artist %s"%artist)
+        print("track %s"%track)
+        lcd.clear()
+        lcd.message('%s \n'%artist)
+        lcd.message('%s '%track)
 
-# 		break
-	if out != '':
+        if len(artist)>16 or len(track)>16:
+            s=0
+            while s<(len(artist)-16):
+                lcd.scrollDisplayLeft()
+                sleep(0.2)
+                s += 1
+            sleep(3)
+            s=0
+            while s<(len(artist)-16):
+                lcd.scrollDisplayRight()
+                sleep(0.2)
+                s += 1
+
+    if out != '':
 # 		sys.stdout.write(out)
-		sys.stdout.flush()
+        sys.stdout.flush()
 
-	lcd.clear()
-	lcd.message('%s \n'%artist)
-	lcd.message('%s '%track)
-	if len(artist)>16 or len(track)>16:
-		s=0
-		while s<(len(artist)-16):
-			lcd.DisplayLeft()
-			sleep(0.4)
-			s=s+1
-		sleep(3)
 # songname = run_cmd(cmd)
 # lcd.message(songname)
 # lcd.message('IP %s' % (ipaddr))
