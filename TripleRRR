@@ -1,3 +1,4 @@
 #!/bin/bash
 
-mplayer -quiet http://freezone.iinet.net.au/include/radio/playlists/triple-r-fm.m3u
+mplayer -quiet -playlist http://freezone.iinet.net.au/include/radio/playlists/triple-r-fm.m3u
+
