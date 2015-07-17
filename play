@@ -31,7 +31,7 @@ while True:
         break
     if out.startswith('Playing'):
         song = out[8:-2]
-        print("Song info: %s"%song)
+        print("Song file: %s"%song)
         info_cmd = ["mediainfo",song]
         medinfo = Popen(info_cmd, stdout=PIPE)
         for line in medinfo.stdout.readlines():
@@ -39,8 +39,8 @@ while True:
                 artist = line.split(':', 1)[1].strip()
             if line.startswith('Track name '):
                 track = line.split(':', 1)[1].strip()
-        print("artist %s"%artist)
-        print("track %s"%track)
+        print("Artist: %s"%artist)
+        print("Track: %s"%track)
         lcd.clear()
         lcd.message('%s \n'%artist)
         lcd.message('%s '%track)

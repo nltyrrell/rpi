@@ -12,7 +12,7 @@ import re
 from sys import argv, exit, stdout
 
 
-PATTERN = re.compile('\.(mp3|ogg|flac)$', re.I)
+PATTERN = re.compile('\.(mp3|ogg|flac|m4a)$', re.I)
 
 def find_files(path):
     """Return all matching files beneath the path."""
@@ -37,5 +37,5 @@ if __name__ == '__main__':
         exit('Usage: %s <path to music files> <name of playlist>' % os.path.basename(argv[0]))
 
     filenames = find_files(argv[1])
-    outfile = open('/home/pi/playlists/'+argv[2]+'.txt','a')
+    outfile = open('/home/pi/playlists/'+argv[2],'a')
     map(outfile.write, create_playlist(filenames))

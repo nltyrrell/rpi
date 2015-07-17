@@ -1,0 +1,91 @@
+#!/usr/bin/python
+
+from Adafruit_CharLCD import Adafruit_CharLCD
+from subprocess import *
+from time import sleep, strftime
+from datetime import datetime
+import numpy as np
+import os
+import sys
+from itertools import ifilter
+import os.path
+import re
+from sys import argv, exit, stdout
+
+
+PATTERN = re.compile('\.(mp3|ogg|flac|m4a)$', re.I)
+
+def find_files(path):
+    """Return all matching files beneath the path."""
+    for root, dirs, files in os.walk(os.path.abspath(path)):
+        for fn in sorted(ifilter(PATTERN.search, files)):
+            yield os.path.join(root, fn)
+
+def create_playlist(filenames):
+    """Create a simple playlist from filenames."""
+    entry = (
+        '%s\n'
+        )
+    for filename in filenames:
+        yield entry % (filename)
+
+def play_plist():
+    lcd = Adafruit_CharLCD()
+    lcd.begin(16, 1)
+
+    cmd = 'mplayer -identify -quiet -playlist /tmp/plist' 
+    p = Popen(cmd, shell=True, stderr=PIPE, stdout=PIPE)
+    song = ''
+    artist='artist'
+    track='track'
+    print("MPLAYER CONTROLS:\n q  quit \n </>  skip forwards/back \n 9/0  Volume Up/Down \n space or p  Pause") 
+
+    while True:
+        out = p.stdout.readline() #(1)
+        if out == '' and p.poll() != None:
+            lcd.clear()
+            break
+        if out.startswith('Playing'):
+            song = out[8:-2]
+            print("Song file: %s"%song)
+            info_cmd = ["mediainfo",song]
+            medinfo = Popen(info_cmd, stdout=PIPE)
+            for line in medinfo.stdout.readlines():
+                if line.startswith('Performer'):
+                    artist = line.split(':', 1)[1].strip()
+                if line.startswith('Track name '):
+                    track = line.split(':', 1)[1].strip()
+            print("Artist: %s"%artist)
+            print("Track: %s"%track)
+            lcd.clear()
+            lcd.message('%s \n'%artist)
+            lcd.message('%s '%track)
+            maxlen = max(len(artist),len(track))
+            if maxlen>16:
+                s=0
+                while s<(maxlen-16):
+                    lcd.scrollDisplayLeft()
+                    sleep(0.2)
+                    s += 1
+                sleep(3)
+                s=0
+                while s<(maxlen-16):
+                    lcd.scrollDisplayRight()
+                    sleep(0.2)
+                    s += 1
+
+        if out != '':
+    # 		sys.stdout.write(out)
+            sys.stdout.flush()
+
+    return
+
+if __name__ == '__main__':
+    if len(argv) != 2:
+        exit('Usage: %s <path to music files> ' % os.path.basename(argv[0]))
+
+    filenames = find_files(argv[1])
+    outfile = open('/tmp/plist','w')
+    map(outfile.write, create_playlist(filenames))
+    play_plist()
+
