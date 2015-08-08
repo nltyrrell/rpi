@@ -34,8 +34,8 @@ def create_playlist(filenames):
 
 if __name__ == '__main__':
     if len(argv) != 3:
-        exit('Usage: %s <path to music files> <name of playlist>' % os.path.basename(argv[0]))
+        exit('Usage: %s <name of playlist> <path to music files> ' % os.path.basename(argv[0]))
 
-    filenames = find_files(argv[1])
-    outfile = open('/home/pi/playlists/'+argv[2],'a')
+    filenames = find_files(argv[2])
+    outfile = open('/home/pi/playlists/'+argv[1],'a')
     map(outfile.write, create_playlist(filenames))

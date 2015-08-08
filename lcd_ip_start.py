@@ -7,7 +7,7 @@ from datetime import datetime
 
 lcd = Adafruit_CharLCD()
 
-cmd = "ip addr show eth0 | grep inet | awk '{print $2}' | cut -d/ -f1"
+cmd = "ip addr show eth0 | grep -m1 inet | awk '{print $2}' | cut -d/ -f1"
 
 lcd.begin(16, 1)
 

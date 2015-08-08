@@ -9,8 +9,11 @@ import os
 import sys
 
 statdict = {'TripleR':'http://freezone.iinet.net.au/include/radio/playlists/triple-r-fm.m3u',
+            'PBS1067':'http://eno.emit.com:8000/pbsfm_live_64.mp3.m3u',
             'ABC774':'http://www.abc.net.au/res/streaming/audio/aac/local_melbourne.pls',
-            'PBS1067':'http://eno.emit.com:8000/pbsfm_live_64.mp3.m3u'}
+            'Double J':'http://abc.net.au/res/streaming/audio/aac/dig_music.pls',
+            'Grandstand':'http://abc.net.au/res/streaming/audio/aac/grandstand.pls',
+            'Radio National':'http://abc.net.au/res/streaming/audio/aac/news_radio.pls'}
 
 if len(sys.argv) != 2:
 	sys.exit('Usage: %s <name of station> \n List of stations \n %s' % (os.path.basename(sys.argv[0]), statdict.keys()))
@@ -26,7 +29,11 @@ p = Popen(cmd, shell=True, stderr=PIPE, stdout=PIPE)
 song = ''
 station='station'
 website='website'
-print("MPLAYER CONTROLS:\n q  quit \n </>  skip forwards/back \n 9/0  Volume Up/Down \n space or p  Pause") 
+print("MPLAYER CONTROLS:\n \
+        Skip Forwards/Back    </>  \n \
+        Volume Up/Down        9/0  \n \
+        Pause                 space or p \n   \
+        Quit                  q ") 
 
 while True:
     out = p.stdout.readline() #(1)
