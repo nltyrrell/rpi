@@ -57,22 +57,6 @@ while True:
                 track = line.split(':', 1)[1].strip()
         print("Artist: %s"%artist)
         print("Song: %s"%track)
-        lcd.clear()
-        lcd.message('%s \n'%artist)
-        lcd.message('%s '%track)
-        maxlen = max(len(artist),len(track))
-        if maxlen>16:
-            s=0
-            while s<(maxlen-16):
-                lcd.scrollDisplayLeft()
-                sleep(0.2)
-                s += 1
-            sleep(2)
-            s=0
-            while s<(maxlen-16):
-                lcd.scrollDisplayRight()
-                sleep(0.2)
-                s += 1
 
     if out != '':
 # 		sys.stdout.write(out)
